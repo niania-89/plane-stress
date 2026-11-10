@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mechanics III Unit 1: Plane Stress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Serif:wght@500&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<header><nav id="nav"></nav><div id="bar"><i></i></div></header>
+<main>
+
+<section id="home"><div class="hero"><h1>Plane stress, taught one step at a time</h1>
+<p>Mechanics III, Unit 1. Start from what stress is, finish by drawing Mohr's circle by hand and solving exam questions on your own.</p>
+<a class="btn" href="#basics">Start learning</a><a class="btn alt" href="#mohr">Go to the Mohr's circle tutorial</a></div>
+<h2>Your progress</h2><p id="ptxt"></p>
+<div class="card s"><b>How each topic is taught:</b> simple idea, then formula, then worked example, then diagram, then exam tip, then practice.</div></section>
+
+<section id="objectives"><h2>Learning objectives</h2>
+<div class="card"><h3>Topic 1: Understanding plane stress</h3><ul><li>Say what plane stress is.</li><li>Define direct and shear stress on any plane.</li><li>Calculate stresses at a joint under simple tension.</li><li>Sketch a stress element.</li></ul></div>
+<div class="card"><h3>Topic 2: Plane stress analysis</h3><ul><li>Calculate principal stresses and maximum shear stress.</li><li>Find the orientation of the principal planes.</li><li>Sketch Mohr's circle.</li></ul></div>
+<p>Pages: <a href="#basics">Basics</a>, <a href="#transform">Transformation</a>, <a href="#mohr">Mohr's circle</a>, <a href="#calc">Calculator</a>, <a href="#examples">Worked examples</a>, <a href="#practice">Practice</a>, <a href="#formulas">Formula sheet</a>.</p></section>
+
+<section id="basics"><h2>Plane stress basics</h2>
+<h3>What is stress?</h3><p><b>Simple idea:</b> stress is how hard the material is being pushed or pulled, per unit of area. A thin bar feels the same force as a thick bar, but the thin bar is stressed more.</p>
+<div class="eq">stress = force / area &nbsp; (σ = F / A, units N/mm² = MPa)</div>
+<div class="grid"><div class="card"><b>Direct (normal) stress σ</b><br>Acts perpendicular to a face. Tension (T) pulls away, positive. Compression (C) pushes in, negative.</div>
+<div class="card"><b>Shear stress τ</b><br>Acts along a face, like scissors or sliding cards. It tries to distort the square into a diamond.</div></div>
+<h3>Stress elements</h3>
+<div class="grid" id="els"></div>
+<h3>What is plane stress?</h3><p>A thin plate loaded in its own plane has no stress through the thickness. Everything happens in the x and y directions, so three numbers describe it: σ<sub>x</sub>, σ<sub>y</sub> and τ<sub>xy</sub>.</p>
+<h3>Stress at a joint under simple tension</h3>
+<p>A bar has σ₀ = F/A along its axis. A joint whose normal is at angle φ to the axis feels:</p>
+<div class="eq">σ = σ₀ cos²φ &nbsp;&nbsp; τ = σ₀ sinφ cosφ</div>
+<div class="tip"><b>Sign convention used on this site:</b> tension is +, compression is −. τ<sub>xy</sub> is positive when the shear on the right-hand face points up (a counterclockwise turn on the element).</div></section>
+
+<section id="transform"><h2>Stress transformation</h2>
+<p><b>Simple idea:</b> the same material state gives different σ and τ when you cut it at a different angle. θ is measured counterclockwise from the x-face.</p>
+<div class="eq">σθ = (σx+σy)/2 + [(σx−σy)/2] cos2θ + τxy sin2θ<br>τθ = −[(σx−σy)/2] sin2θ + τxy cos2θ</div>
+<div class="eq">σavg = (σx+σy)/2<br>σ1,2 = σavg ± √[((σx−σy)/2)² + τxy²]<br>τmax = √[((σx−σy)/2)² + τxy²]<br>tan 2θp = 2τxy / (σx−σy)</div>
+<div class="tip"><b>Quadrant check:</b> do not trust a calculator's atan alone. Use atan2(2τxy, σx−σy). The angle it gives is where σ1 acts, measured counterclockwise from the x-face. The other principal plane is 90° further round.</div>
+<p>Why 2θ? Two faces 90° apart on the element are 180° apart on the circle, so every physical angle is doubled.</p></section>
+
+<section id="mohr"><h2>How to draw Mohr's circle: step-by-step guide</h2>
+<div class="card s"><b>Example:</b> σ<sub>x</sub> = 80 MPa (T), σ<sub>y</sub> = 20 MPa (T), τ<sub>xy</sub> = 30 MPa. <br><b>Sign convention:</b> the τ axis points <b>down</b>, because positive τ<sub>xy</sub> (counterclockwise on the vertical faces) plots down. So A = (σ<sub>x</sub>, τ<sub>xy</sub>) and B = (σ<sub>y</sub>, −τ<sub>xy</sub>) always sit on opposite sides, and a counterclockwise turn on the element is a counterclockwise turn on the circle.</div>
+<div class="row"><button class="btn alt" id="prev">Previous</button><button class="btn" id="next">Next step</button><button class="btn alt" id="replay">Replay</button><span id="stepn"></span></div>
+<div class="grid" style="align-items:start"><svg id="msvg" viewBox="0 0 400 300" role="img" aria-label="Mohr's circle being constructed"></svg>
+<div><div class="card s" id="stext"></div><div class="grid" id="stepEls"></div></div></div></section>
+
+<section id="calc"><h2>Interactive Mohr's circle calculator</h2>
+<div class="row"><label>σx <input type="number" id="cx" value="80"></label><label>σy <input type="number" id="cy" value="20"></label><label>τxy <input type="number" id="ct" value="30"></label><span>MPa</span></div>
+<div class="row"><label><input type="checkbox" id="oc" checked> Coordinates</label><label><input type="checkbox" id="orr" checked> Radius</label><label><input type="checkbox" id="oco" checked> Construction line</label><label><input type="checkbox" id="opr" checked> Principal points</label><label><input type="checkbox" id="otm" checked> Max shear points</label></div>
+<div class="grid" style="align-items:start"><svg id="csvg" viewBox="0 0 400 300" role="img" aria-label="Interactive Mohr's circle"></svg>
+<div><div class="card" id="cout"></div><div class="card s" id="cinfo">Click a point on the circle to see what it means.</div></div></div></section>
+
+<section id="examples"><h2>Learn how to solve examination questions</h2>
+<p>Each example follows the same routine: <b>understand, formula, substitute, solve, draw, answer, tip.</b></p>
+<details open><summary>Example 1: simple direct stress at a joint</summary>
+<p><b>A. Understand.</b> A bar of area 100 mm² carries 20 kN in tension. Find σ and τ on a joint whose normal is 30° from the axis.</p>
+<p><b>B. Formula.</b> Axial stress, then σ = σ₀cos²φ and τ = σ₀sinφcosφ.</p>
+<p><b>C and D. Substitute and solve.</b><br>σ₀ = F/A = 20 000 N / 100 mm² = 200 N/mm²<br>σ = 200 × cos²30° = 200 × 0.75 = <b>150 N/mm²</b><br>τ = 200 × sin30° × cos30° = 200 × 0.5 × 0.866 = <b>86.6 N/mm²</b></p>
+<p><b>E. Check.</b> σ² and τ must satisfy (σ − 100)² + τ² = 100²: 2500 + 7500 = 10 000 ✓ (Mohr's circle for simple tension has centre 100 and radius 100).</p>
+<p><b>F. Answer.</b> σ = 150 N/mm² (T), τ = 86.6 N/mm².</p>
+<div class="tip"><b>G. Tip.</b> Convert kN to N before dividing by mm². Say whether the angle is to the axis or to the joint plane.</div></details>
+<details><summary>Example 2: combined stress, principal and maximum shear, Mohr's circle</summary>
+<p><b>A. Understand.</b> σx = 80, σy = 20, τxy = 30 MPa. Find σ1, σ2, τmax and the stresses on a plane at θ = 30° counterclockwise from the x-face.</p>
+<p><b>B and C. Formulas with substitution.</b><br>C = (80 + 20)/2 = 50 MPa<br>R = √(30² + 30²) = 42.43 MPa</p>
+<p><b>D. Solve.</b><br>σ1 = 50 + 42.43 = <b>92.43 MPa</b>, σ2 = 50 − 42.43 = <b>7.57 MPa</b>, τmax = <b>42.43 MPa</b><br>2θp = atan2(60, 60) = 45°, so θp = <b>22.5° counterclockwise</b> from the x-face to σ1<br>σθ = 50 + 30cos60° + 30sin60° = 50 + 15 + 25.98 = <b>90.98 MPa</b><br>τθ = −30sin60° + 30cos60° = −25.98 + 15 = <b>−10.98 MPa</b></p>
+<svg id="exsvg" viewBox="0 0 400 300" role="img" aria-label="Mohr's circle for example 2"></svg>
+<p><b>F. Answer.</b> σ1 = 92.4 MPa, σ2 = 7.6 MPa, τmax = 42.4 MPa, σθ = 91.0 MPa, τθ = −11.0 MPa (clockwise).</p>
+<div class="tip"><b>G. Tip.</b> Check σ1 + σ2 = σx + σy (100 = 100 ✓). Marks are lost for a wrong rotation direction and for forgetting to halve 2θ.</div></details>
+<p class="card s">More examples (maximum shear planes, yield criteria) are the next build.</p></section>
+
+<section id="practice"><h2>Practice questions</h2><p>Use the hints first. Then answer.</p><div id="pq"></div></section>
+
+<section id="formulas"><h2>Formula sheet</h2>
+<table><tr><th>Formula</th><th>When to use</th></tr>
+<tr><td>σ = F/A (MPa = N/mm²)</td><td>Direct stress. Convert kN to N.</td></tr>
+<tr><td>σθ = σavg + [(σx−σy)/2]cos2θ + τxy sin2θ</td><td>Normal stress on a plane at θ (ccw from x-face).</td></tr>
+<tr><td>τθ = −[(σx−σy)/2]sin2θ + τxy cos2θ</td><td>Shear stress on that plane.</td></tr>
+<tr><td>σavg = C = (σx+σy)/2</td><td>Centre of the circle. Also σ on max shear planes.</td></tr>
+<tr><td>R = τmax = √[((σx−σy)/2)² + τxy²]</td><td>Radius. Maximum in-plane shear.</td></tr>
+<tr><td>σ1,2 = C ± R</td><td>Principal stresses (zero shear).</td></tr>
+<tr><td>tan2θp = 2τxy/(σx−σy)</td><td>Principal plane angle. Use atan2 and check the quadrant.</td></tr></table>
+<div class="tip"><b>Conventions:</b> tension +, compression −. τxy positive when the right-face shear points up. θ is positive counterclockwise. On the circle the τ axis points down, and angles are doubled.</div></section>
+</main><script src="script.js"></script></body></html>
